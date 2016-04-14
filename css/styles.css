@@ -7,3 +7,7 @@ body {
 	background: #f5f5f5;
 	margin: 3em 3em 6em 3em;
 }
+/* geosmiles on 2016-04-14 --*/
+#map {
+	height: 180px; 
+	}
