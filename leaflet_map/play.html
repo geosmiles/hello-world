@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Quick Start Guide Example</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="http://www.rbwm.gov.uk/search/data/ea/js/leaflet/leaflet.css" />
+	<script src="http://www.rbwm.gov.uk/search/data/ea/js/leaflet/leaflet.js"></script>
+	<script type="text/javascript" src="http://www.rbwm.gov.uk/search/data/ea/js/Permalink.Layer.js"></script>
+	<script type="text/javascript" src="http://www.rbwm.gov.uk/search/data/ea/js/Permalink.js"></script> 
+	<script type="text/javascript" src="http://www.rbwm.gov.uk/search/data/ea/js/Permalink.Marker.js"></script>
+	<script src="http://061796rbwm/data/js/car_parks.js"></script>
+</head>
+<body>
+	<div id="map" style="width: 600px; height: 400px"></div>
+	<script>
+var map = L.map('map').setView([51.48552, -0.6097], 14);
+var basemap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011'
+}).addTo(map);
+
+
+var parkingicon = L.icon({
+    iconUrl: 'http://061796rbwm/images/parking_pin.png',
+    shadowUrl: 'http://061796rbwm/images/parking_pin_shaddow.png',
+    shadowSize: [32, 32], // size of the shadow
+    shadowAnchor: [-1, 37], // the same for the shadow
+    iconSize: [32, 37],
+    iconAnchor: [16, 37],
+    popupAnchor: [0, -28]
+});
+
+
+var geojsonLayer = L.geoJson(car_parks, {
+    pointToLayer: function (feature, latlng) {
+        return L.marker(latlng, {
+            icon: parkingicon
+        });
+    },
+    onEachFeature: function (feature, layer) {
+        layer.bindPopup('<div><center><h3> Name:' + feature.properties.name + '</br>' + feature.properties.address + '</br>' + feature.properties.postcode +'</br>' + '<\/br> <a href="http://www.rbwm.gov.uk/web/' + feature.properties.web_page + '">more information...<\/a></h3><\/div>');
+        layer.on('mouseover', function (e) {
+            this.openPopup();
+        });
+
+    }
+});
+map.addLayer(geojsonLayer);
+map.addControl(new L.Control.Permalink({text: 'Permalink'}));
+		</script>
+</script>
+</body>
+</html>
